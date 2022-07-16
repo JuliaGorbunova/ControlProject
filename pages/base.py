@@ -79,7 +79,7 @@ class WebPage(object):
         return self._web_driver.current_url
 
     def get_relative_link(self):
-        url = urlparse(self.driver.current_url)
+        url = urlparse(self._web_driver.current_url)
         return url.path
 
     def get_page_source(self):
