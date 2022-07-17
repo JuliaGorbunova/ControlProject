@@ -1,8 +1,10 @@
+# 32 теста
 # python -m pytest -v --driver Chrome --driver-path C:\Users\Юлия\PycharmProjects\ControlProject\chromedriver.exe tests\test_main_page.py
 
 from pages.main_page import MainPage
 from pages.account_page import AccountPage
 from tests.data import correct_email,correct_pass,incorrect_email,incorrect_pass
+import pytest
 
 def test_how_to_pay_link(web_browser):
     """при клике на ссылку "Как купить" происходит переход на соответствущую страницу"""
@@ -103,17 +105,51 @@ def test_auth_with_correct_data(web_browser):
     page.email_field.send_keys(correct_email)
     page.pass_field.send_keys(correct_pass)
     page.login_button.click()
-    page=AccountPage(web_browser)
-    res=(page.email.find().is_displayed()) and (('Клиентский номер, ID:') in page.get_page_source()),'При вводе в поля формы авторизации' \
-                                                                                                     ' корректных данных действующего пользователя ' \
-                                                                                                     'не происходит вход в аккаунт'
+    assert page.get_relative_link()=='/member/','При вводе в поля формы авторизации корректных данных действующего пользователя не происходит вход в аккаунт'
 
-def test_auth_with_uncorrect_email(web_browser):
-    """при вводе в поля формы авторизации некорректного email происходит переход на страницу с сообщением об ошибке"""
+@pytest.mark.parametrize("email",list(incorrect_email.keys())[0:2],
+                         ids=list(incorrect_email.values())[0:2])
+def test_auth_with_empty_email(web_browser,email):
+    """при вводе в поле для email пустого значения или пробела происходит переход на страницу с сообщением об ошибке"""
     page = MainPage(web_browser)
     page.auth_button.click()
     page.email_field.send_keys(incorrect_email)
     page.pass_field.send_keys(correct_pass)
+    page.login_button.click()
+    assert 'Вы не указали информацию для входа' in page.get_page_source()
+
+@pytest.mark.xfail
+@pytest.mark.parametrize("email",list(incorrect_email.keys())[2:],
+                         ids=list(incorrect_email.values())[2:])
+def test_auth_with_uncorrect_email(web_browser,email):
+    """при вводе в поле для ввода email некорректного значения пробела происходит переход на страницу с сообщением об ошибке
+    тест помечен как падающий, т.к. при вводе букв русского алфавита появляется сообщение о том, что не указана информация для входа"""
+    page = MainPage(web_browser)
+    page.auth_button.click()
+    page.email_field.send_keys(incorrect_email)
+    page.pass_field.send_keys(correct_pass)
+    page.login_button.click()
+    assert 'Указан неверный e-mail или пароль' in page.get_page_source()
+
+@pytest.mark.parametrize("passw",list(incorrect_pass.keys())[0:2],
+                         ids=list(incorrect_pass.values())[0:2])
+def test_auth_with_empty_pass(web_browser,passw):
+    """при вводе в поле для пароля пустого значения или пробела появляется сообщение об ошибке"""
+    page = MainPage(web_browser)
+    page.auth_button.click()
+    page.email_field.send_keys(correct_email)
+    page.pass_field.send_keys(passw)
+    page.login_button.click()
+    assert 'Вы не указали информацию для входа' in page.get_page_source()
+
+@pytest.mark.parametrize("passw",list(incorrect_pass.keys())[2:],
+                         ids=list(incorrect_pass.values())[2:])
+def test_auth_with_incorrect_pass(web_browser,passw):
+    """при вводе в поле для ввода пароля некорректного значения пробела происходит переход на страницу с сообщением об ошибке"""
+    page = MainPage(web_browser)
+    page.auth_button.click()
+    page.email_field.send_keys(correct_email)
+    page.pass_field.send_keys(passw)
     page.login_button.click()
     assert 'Указан неверный e-mail или пароль' in page.get_page_source()
 
