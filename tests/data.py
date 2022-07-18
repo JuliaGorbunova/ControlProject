@@ -1,3 +1,6 @@
+import random
+import string
+
 def russian_chars():
    return 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 
@@ -9,6 +12,11 @@ def special_chars():
 
 def generate_string(n):
     return n*'x'
+
+def generate_random_string(length):
+    letters = string.ascii_lowercase
+    rand_string = ''.join(random.choice(letters) for i in range(length))
+    return rand_string
 
 correct_email="markovna.zin@yandex.ru"
 correct_pass="Qwerty1234567"
@@ -28,3 +36,26 @@ incorrect_pass={'':'empty string',
                  chinese_chars():'chinese',
                  special_chars():'specials',
                  '123':'digit'}
+correct_product=['телевизор','кофеварка','чайник','тостер','пылесос']
+incorrect_product_title={
+'Телевизор':'first capital letter',
+    'ТеЛеВиЗоР':'fence',
+    'ТЕЛЕВИЗОР':'all lower case',
+    ' телевизор':'space at the beginning',
+    'теле визор':'space in the middle',
+    'телевизор ':'space at the end',
+    'тлевизор':'missing letter',
+    'телефизор':'spelling mistake',
+    'телевизор)))':'special characters at the end',
+    ')))телевизор':'space at the beginning',
+    'теле.визор':'space in the middle',
+    'ntktdbpjh':'English layout',
+    'televizor':'Latin alphabet'
+}
+other_value_for_search={
+                 generate_random_string(10): 'non-existent product',
+                 generate_string(255):'255 symbols',
+                 chinese_chars():'chinese',
+                 special_chars():'specials',
+                 '123456789':'digit'
+}
