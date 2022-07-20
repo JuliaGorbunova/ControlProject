@@ -32,6 +32,7 @@ class MainPage(WebPage):
     search_field=WebElement(xpath='//input[@class="header__search__inputText js__header__search__inputText"]')
     search_button=WebElement(xpath='//input[@class="header__search__inputGogogo"]')
     products_titles=ManyWebElements(xpath='//a[@class="indexGoods__item__name"]')
+    product_kategory=ManyWebElements(xpath='//a[@class="sCM__item__link"]')
     auth_button=WebElement(xpath='//a[@title="Вход в Личный кабинет"]')
     bookmarks=WebElement(xpath='//a[@href="/bookmarks.html"]')
     basket=WebElement(xpath='//a[@href="/basket.html"]')

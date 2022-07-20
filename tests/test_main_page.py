@@ -1,11 +1,21 @@
-# 32 теста
+# 24 теста
 # python -m pytest -v --driver Chrome --driver-path C:\Users\Юлия\PycharmProjects\ControlProject\chromedriver.exe tests\test_main_page.py
 
 from pages.main_page import MainPage
 from pages.account_page import AccountPage
+from pages.base import WebPage
+from pages.elements import WebElement
+from pages.elements import ManyWebElements
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.select import Select
 from tests.data import correct_email,correct_pass,incorrect_email,incorrect_pass,generate_random_string,correct_product,incorrect_product_title,other_value_for_search
 import pytest
 import random
+driver=webdriver.Chrome()
+
 
 # def test_how_to_pay_link(web_browser):
 #     """при клике на ссылку "Как купить" происходит переход на соответствущую страницу"""
@@ -154,65 +164,103 @@ import random
 #     page.login_button.click()
 #     assert 'Указан неверный e-mail или пароль' in page.get_page_source()
 #
-# def test_auth_with_uncorrect_pass(web_browser):
-#     """при вводе в поля формы авторизации некорректного пароля появляется сообщение об ошибке"""
+# @pytest.mark.xfail
+# def test_search_field(web_browser):
+#     """в результате поиска через поисковую строку главной страницы отображаются товары с названием, соответствующим введенному в строку тексту
+#     тест помечен как падающий, т.к. в результате поиска по слову "пылесос" в результатах поиска отображаются стеклоочистители"""
 #     page = MainPage(web_browser)
-#     page.auth_button.click()
-#     page.email_field.send_keys(correct_email)
-#     page.pass_field.send_keys(incorrect_pass)
-#     page.login_button.click()
-#     assert 'Указан неверный e-mail или пароль' in page.get_page_source()
+#     page.search_field.click()
+#     product=random.choice(correct_product)
+#     page.search_field.send_keys(product)
+#     page.search_button.click()
+#     if page.products_titles.count()>0:
+#         for title in page.products_titles.get_text():
+#             assert product in title.lower(),f'Поиск через поисковую строку выдал товар с названием, не соответствующим введенному тексту - {title}'
+#     if page.product_kategory.count()>0:
+#         for kategory in page.product_kategory.get_text():
+#             assert product in kategory.lower(),f'Поиск через поисковую строку выдал категории товар с названиями, не соответствующим введенному тексту - {kategory}'
+#
+# @pytest.mark.xfail
+# @pytest.mark.parametrize("product",list(incorrect_product_title.keys()),
+#                          ids=list(incorrect_product_title.values()))
+# def test_search_field_eng_text(web_browser,product):
+#     """при вводе в поисковую строку главной страницы названия товара с орфографическими ошибками, пробелами, в различном регистре, латиницей,
+#     в английской раскладке в результате поиска отображаются товары с названием, соответствующим введенному в строку тексту
+#     тест помечен как падающий, т.к. в некоторых случаях отображаются товары с соответствующим названием, в некоторых - нет """
+#     page = MainPage(web_browser)
+#     page.search_field.click()
+#     page.search_field.send_keys(product)
+#     page.search_button.click()
+#     assert page.products_titles.count()>0,'Товары не найдены'
+#     for title in page.products_titles.get_text():
+#         assert 'телевизор' in title.lower(),'При вводе в поисковую строку главной страницы видоизмененного текста' \
+#                                             'поиск осуществляется не в соответствии с ввееденным значением'
+#
+# @pytest.mark.xfail
+# def test_search_field_backspace(web_browser):
+#     """при вводе в поисковую строку главной страницы пробела
+#     в результате поиска отображается сообщение о том, что задан пустой поисковый запрос
+#     тест помечен как падающий, поскольку появляется сообщение о том, что товары не найдены из-за допущенной ошибки в поисковом запросе
+#     или отсутствии товара"""
+#     page = MainPage(web_browser)
+#     page.search_field.click()
+#     page.search_field.send_keys(' ')
+#     page.search_button.click()
+#     assert 'Ничего не найдено' in page.get_page_source(),'При вводе в поисковую строку главной страницы пробела \
+#                                                             в результате поиска не отображается сообщение о том, что задан пустой поисковый запрос'
+#
+# @pytest.mark.parametrize("value",list(other_value_for_search.keys()),
+#                          ids=list(other_value_for_search.values()))
+# @pytest.mark.xfail
+# def test_other_value_for_search_field(web_browser,value):
+#     """при вводе в поисковую строку главной страницы спецсимволов, китайских символов, очень длинной строки или цифр
+#     появляется сообщение о том, что введенное значение некорректно
+#     тест помечен как падающий, поскольку при вводе произвольного набора букв появляется сообщение о том, что товары не найдены,
+#     при вводе спецсимволов происходит переход на недоступную страницу (сайт не может обработать этот запрос),
+#     при вводе китайских символов или очень длинной строки происходит переход на пустую страницу"""
+#     page = MainPage(web_browser)
+#     page.search_field.click()
+#     page.search_field.send_keys(value)
+#     page.search_button.click()
+#     assert 'Ничего не найдено' in page.get_page_source(),'При вводе в поисковую строку главной страницы спецсимволов,' \
+#                                                          ' китайских символов, очень длинной строки или цифр\
+#                                                         в результате поиска не отображается сообщение о том, что введенное значение некорректно'
 
-def test_search_field(web_browser):
-    """в результате поиска через поисковую строку главной страницы отображаются товары с названием, соответствующим введенному в строку тексту"""
+# def test_sort_product_by_price_from_min(web_browser):
+#     """при нажатии кнопки сортировки товаров по критерию "сначала подешевле" товары сортируются от самых дешевых к самым дорогим"""
+#     page = MainPage(web_browser)
+#     page.search_field.click()
+#     page.search_field.send_keys('телевизор')
+#     page.search_button.click()
+#     select_element_sort = WebDriverWait(web_browser, 5).until(EC.presence_of_element_located((By.XPATH,'//select[@id="js__listingSort_ID"]')))
+#     select_object_sort = Select(select_element_sort)
+#     select_object_sort.select_by_value('price-asc')
+#     all_prices=ManyWebElements(xpath='//span[@class="price regular"]').get_text()
+#     all_prices=[float(pr.replace(' ','')) for pr in all_prices]
+#     assert all_prices==sorted(all_prices)
+
+# def test_sort_product_by_price_from_max(web_browser):
+#     """при нажатии кнопки сортировки товаров по критерию "сначала подороже" товары сортируются от самых дорогих к самым дешевым"""
+#     page = MainPage(web_browser)
+#     page.search_field.click()
+#     page.search_field.send_keys('телевизор')
+#     page.search_button.click()
+#     select_element_sort = WebDriverWait(web_browser, 5).until(EC.presence_of_element_located((By.XPATH,'//select[@id="js__listingSort_ID"]')))
+#     select_object_sort = Select(select_element_sort)
+#     select_object_sort.select_by_value('price-desc')
+#     all_prices=ManyWebElements(xpath='//span[@class="price regular"]').get_text()
+#     all_prices=[float(pr.replace(' ','')) for pr in all_prices]
+#     assert all_prices[::-1]==sorted(all_prices)
+
+def test_sort_product_by_price_from_title_asc(web_browser):
+    """при нажатии кнопки сортировки товаров по критерию "по названию (а-я)" товары сортируются в алфавитном порядке"""
     page = MainPage(web_browser)
     page.search_field.click()
-    product=random.choice(correct_product)
-    page.search_field.send_keys(product)
+    page.search_field.send_keys('телевизор')
     page.search_button.click()
-    assert page.products_titles.count()>0,'Товары не найдены'
-    for title in page.products_titles.get_text():
-        assert product in title.lower(),f'Поиск через поисковую строку выдал товар с названием, не соответствующим введенному тексту - {title}'
-
-@pytest.mark.parametrize("product",list(incorrect_product_title.keys()),
-                         ids=list(incorrect_product_title.values()))
-def test_search_field_eng_text(web_browser,product):
-    """при вводе в поисковую строку главной страницы названия товара с орфографическими ошибками, пробелами, в различном регистре, латиницей,
-    в английской раскладке в результате поиска отображаются товары с названием, соответствующим введенному в строку тексту"""
-    page = MainPage(web_browser)
-    page.search_field.click()
-    page.search_field.send_keys(product)
-    page.search_button.click()
-    assert page.products_titles.count()>0,'Товары не найдены'
-    for title in page.products_titles.get_text():
-        assert 'телевизор' in title.lower(),'При вводе в поисковую строку главной страницы видоизмененного текста' \
-                                            'поиск осуществляется не в соответствии с ввееденным значением'
-
-@pytest.mark.xfail
-def test_search_field_backspace(web_browser):
-    """при вводе в поисковую строку главной страницы пробела
-    в результате поиска отображается сообщение о том, что задан пустой поисковый запрос
-    тест помечен как падающий, поскольку появляется сообщение о том, что товары не найдены из-за допущенной ошибки в поисковом запросе
-    или отсутствии товара"""
-    page = MainPage(web_browser)
-    page.search_field.click()
-    page.search_field.send_keys(' ')
-    page.search_button.click()
-    assert 'Ничего не найдено' in page.get_page_source(),'При вводе в поисковую строку главной страницы пробела \
-                                                            в результате поиска не отображается сообщение о том, что задан пустой поисковый запрос'
-
-@pytest.mark.parametrize("value",list(other_value_for_search.keys()),
-                         ids=list(other_value_for_search.values()))
-@pytest.mark.xfail
-def test_other_value_for_search_field(web_browser,value):
-    """при вводе в поисковую строку главной страницы спецсимволов, китайских символов, очень длинной строки или цифр
-    появляется сообщение о том, что введенное значение некорректно
-    тест помечен как падающий, поскольку появляется сообщение о том, что товары не найдены"""
-    page = MainPage(web_browser)
-    page.search_field.click()
-    page.search_field.send_keys(value)
-    page.search_button.click()
-    assert 'Ничего не найдено' in page.get_page_source(),'При вводе в поисковую строку главной страницы спецсимволов,' \
-                                                         ' китайских символов, очень длинной строки или цифр\
-                                                        в результате поиска не отображается сообщение о том, что введенное значение некорректно'
-
+    select_element_sort = WebDriverWait(web_browser, 5).until(EC.presence_of_element_located((By.XPATH,'//select[@id="js__listingSort_ID"]')))
+    select_object_sort = Select(select_element_sort)
+    select_object_sort.select_by_value('title-asc')
+    all_titles=ManyWebElements(xpath='//span[@class="indexGoods__item__name"]').get_text()
+    all_titles=[float(pr.replace(' ','')) for pr in all_titles]
+    assert all_titles==sorted(all_titles)

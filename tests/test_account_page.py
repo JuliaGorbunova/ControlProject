@@ -1,4 +1,5 @@
 # python -m pytest -v --driver Chrome --driver-path C:\Users\Юлия\PycharmProjects\ControlProject\chromedriver.exe tests\test_account_page.py
+# 6 тестов
 
 from pages.main_page import MainPage
 from pages.account_page import AccountPage

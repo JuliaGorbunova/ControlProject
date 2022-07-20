@@ -1,4 +1,4 @@
-# 23 теста
+# 7 тестов
 # для запуска тестов необходимо выполнить в терминале команду:
 # python -m pytest -v --driver Chrome --driver-path C:\Users\Юлия\PycharmProjects\SmartPageObject\chromedriver.exe tests\test_auth_page.py
 from pages.auth_page import AuthPage
