@@ -13,7 +13,7 @@ class AuthPage(WebPage):
     login_button=WebElement(xpath='//input[@class="button button__orange"]')
     forget_pass=WebElement(xpath='//a[@title="Забыли пароль?"]')
     reg_button=WebElement(xpath='//a[@title="Зарегистрироваться"]')
-    checkbox_remember_me=WebElement(xpath='//span[@class="ui-checkboxradio-icon ui-corner-all ui-icon ui-icon-background ui-state-hover ui-icon-blank"]')
+    basket=WebElement(xpath='//div/a[contains(@href,"basket")]')
 
 
 
