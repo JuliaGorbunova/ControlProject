@@ -14,6 +14,7 @@ def chrome_options(chrome_options):
     # chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--log-level=DEBUG')
+    chrome_options.add_argument('--start-maximized')
 
     return chrome_options
 
@@ -33,7 +34,6 @@ def pytest_runtest_makereport(item, call):
 def web_browser(request, selenium):
 
     browser = selenium
-    browser.set_window_size(1400, 1000)
 
     # Return browser instance to test case:
     yield browser

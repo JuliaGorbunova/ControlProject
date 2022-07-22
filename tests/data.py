@@ -19,7 +19,7 @@ def generate_random_string(length):
     return rand_string
 
 correct_email="markovna.zin@yandex.ru"
-correct_pass="Qwerty1234567"
+correct_pass="Qwerty12345678"
 incorrect_email={'':'empty string',
                  ' ':'whitespace',
                  'murkovna.zin@yandex.ru':'uncorrect email',

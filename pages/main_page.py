@@ -46,6 +46,13 @@ class MainPage(WebPage):
     login_button=WebElement(xpath='//input[@value="Вход"]')
     all_brands=WebElement(xpath='//a[@href="/brands/"]')
     all_news=WebElement(xpath='//a[@href="/news/"]')
+    delivery=WebElement(xpath='//a[@title="Доставка"]')
+    selftake=WebElement(xpath='//a[@title="Самовывоз"]')
+    service=WebElement(xpath='//a[@title="Сервисный центр"]')
+    vkontakte=WebElement(xpath='//a[@title="ВКонтакте"]')
+    telegram=WebElement(xpath='//a[@title="Telegram"]')
+    youtube=WebElement(xpath='//a[@title="YouTube"]')
+    ok=WebElement(xpath='//a[@title="Одноклассники"]')
 
 
 

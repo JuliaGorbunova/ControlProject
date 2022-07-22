@@ -28,7 +28,7 @@ def test_auth_with_empty_email(web_browser,email):
 @pytest.mark.parametrize("email",list(incorrect_email.keys())[2:],
                          ids=list(incorrect_email.values())[2:])
 def test_auth_with_uncorrect_email(web_browser,email):
-    """при вводе в поле для ввода email некорректного значения пробела происходит переход на страницу с сообщением об ошибке
+    """при вводе в поле для ввода email некорректного значения происходит переход на страницу с сообщением об ошибке
     тест помечен как падающий, т.к. при вводе букв русского алфавита появляется сообщение о том, что не указана информация для входа"""
     page = AuthPage(web_browser)
     page.email_field.send_keys(email)

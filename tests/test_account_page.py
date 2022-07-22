@@ -1,9 +1,7 @@
 # python -m pytest -v --driver Chrome --driver-path C:\Users\Юлия\PycharmProjects\ControlProject\chromedriver.exe tests\test_account_page.py
 # 6 тестов
 
-from pages.main_page import MainPage
 from pages.account_page import AccountPage
-from tests.data import correct_email,correct_pass,incorrect_email,incorrect_pass
 
 def test_member_edit_link(web_browser):
     """при клике на ссылку "Личные данные" происходит переход на соответствущую страницу"""

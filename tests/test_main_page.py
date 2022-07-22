@@ -1,10 +1,7 @@
-# 30 тестов
+# 37 тестов
 # python -m pytest -v --driver Chrome --driver-path C:\Users\Юлия\PycharmProjects\ControlProject\chromedriver.exe tests\test_main_page.py
 
 from pages.main_page import MainPage
-from pages.account_page import AccountPage
-from pages.base import WebPage
-from pages.elements import WebElement
 from pages.elements import ManyWebElements
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -12,14 +9,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.support.select import Select
-from tests.data import correct_email,correct_pass,incorrect_email,incorrect_pass,generate_random_string,correct_product,incorrect_product_title,other_value_for_search
+from tests.data import correct_email,correct_pass,incorrect_email,incorrect_pass,correct_product,incorrect_product_title,other_value_for_search
 import pytest
 import random
 driver=webdriver.Chrome()
 
 
 def test_how_to_pay_link(web_browser):
-    """при клике на ссылку "Как купить" происходит переход на соответствущую страницу"""
+    """при клике на ссылку "Как купить" происходит переход на соответствующую страницу"""
     page = MainPage(web_browser)
     page.how_to_pay.click()
     assert page.get_relative_link()=='/info/delivery.html','Ссылка "Как купить" не ведет на соответствующую страницу'
@@ -99,17 +96,71 @@ def test_all_promotions(web_browser):
     assert page.get_relative_link() == '/actions/', 'Клик на ссылку "Все акции" не ведет на страницу акций'
 
 def test_all_brands(web_browser):
-    """при клике на ссылку "Все бренды" происходит переход на страницу акций"""
+    """при клике на ссылку "Все бренды" происходит переход на страницу брендов"""
     page = MainPage(web_browser)
     page.all_brands.click()
     assert page.get_relative_link() == '/brands/', 'Клик на ссылку "Все бренды" не ведет на страницу брендов'
 
 def test_all_news(web_browser):
-    """при клике на ссылку "Все новости" происходит переход на страницу акций"""
+    """при клике на ссылку "Все новости" происходит переход на страницу новостей"""
     page = MainPage(web_browser)
     page.all_news.click()
     assert page.get_relative_link() == '/news/', 'Клик на ссылку "Все новости" не ведет на страницу новостей'
 
+def test_delivery_link(web_browser):
+    """при клике на ссылку "Доставка" в футере главной страницы сайта происходит переход на страницу с условиями доставки"""
+    page = MainPage(web_browser)
+    page.delivery.click()
+    assert page.get_relative_link()=='/info/delivery.html','Ссылка "Доставка" не ведет на соответствующую страницу'
+
+def test_selftake_link(web_browser):
+    """при клике на ссылку "Самовывоз" в футере главной страницы сайта происходит переход на страницу с условиями доставки"""
+    page = MainPage(web_browser)
+    page.selftake.click()
+    assert page.get_relative_link()=='/info/selftake.html','Ссылка "Самовывоз" не ведет на страницу с условиями самовывоза'
+
+def test_service_link(web_browser):
+    """при клике на ссылку "Сервис-центр" в футере главной страницы сайта происходит переход на страницу с условиями сервисного обслуживания"""
+    page = MainPage(web_browser)
+    page.service.click()
+    assert page.get_relative_link()=='/info/service_centre.html','Ссылка "Сервис-центр" не ведет на страницу с условиями сервисного обслуживания'
+
+def test_vkontakte_link(web_browser):
+    """при клике на логотип "Вконтакте" в футере главной страницы сайта происходит переход на страницу магазина в соцсети "Вконтакте" """
+    page = MainPage(web_browser)
+    time.sleep(3)
+    web_browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    page.vkontakte.click()
+    web_browser.switch_to.window(web_browser.window_handles[1])
+    assert web_browser.current_url=='https://vk.com/onlinetrade','Клик по логотипу "Вконтакте" не ведет на страницу магазина в соцсети "Вконтакте"'
+
+def test_telegram_link(web_browser):
+    """при клике на логотип "Telegram" в футере главной страницы сайта происходит переход к чат-боту магазина в мессенджере Telegram"""
+    page = MainPage(web_browser)
+    time.sleep(3)
+    web_browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    page.telegram.click()
+    web_browser.switch_to.window(web_browser.window_handles[1])
+    assert web_browser.current_url=='https://t.me/onlinetradeshopru','Клик по логотипу "Telegram" не ведет к чат-боту магазина в мессенджере Telegram'
+
+def test_youtube_link(web_browser):
+    """при клике на логотип "YouTube" в футере главной страницы сайта происходит переход на страницу магазина в YouTube """
+    page = MainPage(web_browser)
+    time.sleep(3)
+    web_browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    page.youtube.click()
+    web_browser.switch_to.window(web_browser.window_handles[1])
+    assert web_browser.current_url=='https://www.youtube.com/c/onlinetraderu','Клик по логотипу "YouTube" не ведет на страницу магазина в YouTube'
+
+def test_ok_link(web_browser):
+    """при клике на логотип "Одноклассники" в футере главной страницы сайта происходит переход на страницу магазина в соцсети "Одноклассники" """
+    page = MainPage(web_browser)
+    time.sleep(3)
+    web_browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    page.ok.click()
+    web_browser.switch_to.window(web_browser.window_handles[1])
+    assert web_browser.current_url=='https://ok.ru/group/68866316828710','Клик по логотипу "Вконтакте" не ведет на страницу магазина в соцсети "Вконтакте"'
+#
 def test_auth_with_correct_data(web_browser):
     """при вводе в поля формы авторизации корректных данных действующего пользователя происходит вход в аккаунт"""
     page = MainPage(web_browser)
@@ -117,7 +168,7 @@ def test_auth_with_correct_data(web_browser):
     page.email_field.send_keys(correct_email)
     page.pass_field.send_keys(correct_pass)
     page.login_button.click()
-    assert page.get_relative_link()=='/member/','При вводе в поля формы авторизации корректных данных действующего пользователя не происходит вход в аккаунт'
+    assert page.get_current_url()=='https://www.onlinetrade.ru/','При вводе в поля формы авторизации корректных данных действующего пользователя не происходит вход в аккаунт'
 
 @pytest.mark.parametrize("email",list(incorrect_email.keys())[0:2],
                          ids=list(incorrect_email.values())[0:2])
@@ -125,7 +176,7 @@ def test_auth_with_empty_email(web_browser,email):
     """при вводе в поле для email пустого значения или пробела происходит переход на страницу с сообщением об ошибке"""
     page = MainPage(web_browser)
     page.auth_button.click()
-    page.email_field.send_keys(incorrect_email)
+    page.email_field.send_keys(email)
     page.pass_field.send_keys(correct_pass)
     page.login_button.click()
     assert 'Вы не указали информацию для входа' in page.get_page_source()
@@ -138,7 +189,7 @@ def test_auth_with_uncorrect_email(web_browser,email):
     тест помечен как падающий, т.к. при вводе букв русского алфавита появляется сообщение о том, что не указана информация для входа"""
     page = MainPage(web_browser)
     page.auth_button.click()
-    page.email_field.send_keys(incorrect_email)
+    page.email_field.send_keys(email)
     page.pass_field.send_keys(correct_pass)
     page.login_button.click()
     assert 'Указан неверный e-mail или пароль' in page.get_page_source()
@@ -303,4 +354,4 @@ def test_product_in_bookmarks(web_browser):
     time.sleep(5)
     count_new=int(WebDriverWait(web_browser, 5).until(EC.presence_of_element_located((By.XPATH, '//div  [@class="huab__cell__text js__bookmarksCount"]'))).text)
     assert count_new==(count+1),'При нажатии на кнопку "Добавить в закладки" на карточке товара счетчик закладок не увеличивается на 1'
-
+#

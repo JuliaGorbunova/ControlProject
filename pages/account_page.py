@@ -16,10 +16,10 @@ class AccountPage(WebPage):
 
     email=WebElement(xpath='//span[@class="userInfo__itemData"]')
     member_edit=WebElement(xpath='//a[@title="Личные данные"]')
-    member_status=WebElement(xpath='//a[@title="Статус клиента"]')
+    member_status=WebElement(xpath='//a[@title="Статус клиента "]')
     edit_passw=WebElement(xpath='//a[@title="Смена пароля"]')
     adresses=WebElement(xpath='//a[@title="Адреса доставки"]')
-    orders=WebElement(xpath='//a[@title="Мои заказы"]')
+    orders=WebElement(xpath='//a[@title="Заказы"]')
     exit=WebElement(xpath='//a[@title="Выйти из профиля"]')
 
 
